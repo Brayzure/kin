@@ -1,0 +1,22 @@
+{
+  "name": "kin",
+  "version": "0.0.1",
+  "description": "Kin is a dedicated anti-spam solution for your Discord server. Made for Discord Hack Week!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brayzure/kin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Brayzure/kin/issues"
+  },
+  "homepage": "https://github.com/Brayzure/kin#readme",
+  "dependencies": {
+    "eris": "^0.10.0"
+  }
+}

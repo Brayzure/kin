@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Brayzure/kin#readme",
   "dependencies": {
-    "eris": "^0.10.0"
+    "eris": "^0.10.0",
+    "pg": "^7.11.0"
   }
 }

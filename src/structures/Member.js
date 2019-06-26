@@ -1,48 +1,40 @@
+const memberScoring = require("../scoring/memberScoring");
+const Database = require("../Database");
+
 class Member {
     constructor(memberObject) {
         this.data = memberObject;
+        this.messageCount = 0;
+        this.syncScore();
+    }
+
+    async syncScore() {
+        const details = await Database.getMemberDetails(this.data);
+        if(details) this.messageCount = details.message_count;
     }
 
     get score() {
-        return (this.newAccountScore + this.joinedScore + this.avatarScore) / this.mitigatorFactor;
+        return memberScoring.score(this);
     }
 
     get newAccountScore() {
-        const timeSinceAccountCreation = Date.now() - this.data.createdAt;
-        return timeSinceAccountCreation > 784000000 ? 0 : 10 / ((timeSinceAccountCreation / (784000000 / 4)) + 1);
+        return memberScoring.newAccountScore(this);
     }
 
     get joinedScore() {
-        const timeSinceAccountJoin = Date.now() - this.data.joinedAt;
-        return timeSinceAccountJoin > 262800000 ? 0 : 10 / ((timeSinceAccountJoin / (262800000 / 4)) + 1);
+        return memberScoring.joinedScore(this);
     }
 
     get avatarScore() {
-        return !!this.data.avatar ? 0 : 5;
+        return memberScoring.avatarScore(this);
+    }
+
+    get messageScore() {
+        return memberScoring.messageScore(this);
     }
 
     get mitigatorFactor() {
-        let factor = 1;
-        if(this.data.roles.length) factor *= Math.min(2, (this.data.roles.length / 2) + 1);
-        /*
-        if(this.data.flags | FLAGS.EMPLOYEE
-            || this.data.flags | FLAGS.PARTNER
-            || this.data.flags | FLAGS.BUG_HUNTER)
-        {
-            factor *= 16;
-        }
-        if(this.data.flags | FLAGS.HS_EVENTS)
-        {
-            factor *= 2;
-        }
-        else if(this.data.flags | FLAGS.HS_BRAVERY
-            || this.data.flags | FLAGS.HS_BRILLIANCE
-            || this.data.flags | FLAGS.HS_BALANCE)
-        {
-            factor *= 1.5;
-        }
-        */
-        return factor;
+        return memberScoring.mitigatorFactor(this);
     }
 }
 
